@@ -1,23 +1,22 @@
 name: My Starter Workflow
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Run a multi-line script
-        run: |
-          echo "Add other actions to build,"
-          echo "test, and deploy to your project."
+      - run: npm run lint
 
   call-reusable-workflow:
-    # Optioneel: wacht tot de 'build' job klaar is
-    needs: build
-    # Verwijzing naar je lokale reusable workflow
     uses: ./.github/workflows/reusable-workflow.yml
+    strategy:
+      matrix:
+        nodeversion: [14, 16, 18, 20]
     with:
-      node: 14
+      node: ${{ matrix.nodeversion }}
+    secrets: inherit
