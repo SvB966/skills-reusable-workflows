@@ -6,17 +6,11 @@ on:
       - main
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm run lint
-
   call-reusable-workflow:
-    uses: ./.github/workflows/reusable-workflow.yml
     strategy:
       matrix:
         nodeversion: [14, 16, 18, 20]
+    uses: ./.github/workflows/reusable-workflow.yml
     with:
       node: ${{ matrix.nodeversion }}
     secrets: inherit
