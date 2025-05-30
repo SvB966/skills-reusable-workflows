@@ -1,8 +1,8 @@
 name: Reusable Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
+  workflow_call:            # 🚀 maakt de workflow herbruikbaar
+    inputs:                 # optioneel, definieer variabelen
       node:
         required: true
         type: string
@@ -10,10 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Output the input value
-        run: |
-          echo "The node version to use is: ${{ inputs.node }}"
+      - name: Use Node ${{ inputs.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node }}
+      - run: npm ci && npm test
